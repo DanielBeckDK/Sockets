@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+
+<body>
+    <h1>Send a message</h1>
+    <input id="input" type="text">
+    <button onclick={sendMessage()}>Send</button>
+    <div id="messages"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        function sendMessage() {
+
+            const value = document.getElementById("input").value;
+            const input = "<div style='color: blue'>" + value + "</div>";
+            document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + input
+
+            socket.emit("client sent a message", { data: value });
+
+        }
+
+        socket.on("client sent a message", (data) => {
+
+            const input = "<div style='color: red'>" + data.res.data + "</div>";
+
+            document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + input
+
+
+        })
+
+    </script>
+</body>
+
+</html>
